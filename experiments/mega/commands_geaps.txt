@@ -1,0 +1,24 @@
+# Set use_skills to Fasle to obtain baselines
+
+# PointMaze
+python3 experiments/mega/train_mega.py --env pointmaze --tb goalgan_geaps_pointmaze --max_steps 1000000 --seed 111  --first_visit_succ --ag_curiosity goaldisc --replay_size 1000000 --parent_folder pointmaze_goalgan --use_skills True --skill_horizon 2 --n_latents 4 --num_envs 7 --save_embeddings
+python3 experiments/mega/train_mega.py --env pointmaze --tb skewfit_geaps_pointmaze --max_steps 1000000 --seed 111 --first_visit_succ --ag_curiosity skewfit --replay_size 1000000 --parent_folder pointmaze_skewfit --use_skills True --n_latent 4 --skill_horizon 2 --num_envs 7 --save_embeddings --gen_goal
+python3 experiments/mega/train_mega.py --env pointmaze --tb omega_geaps_pointmaze --max_steps 1000000 --seed 111 --first_visit_succ --ag_curiosity minkde --replay_size 200000 --transition_to_dg --use_skills True --skill_horizon 2 --n_latents 4 --parent_folder pointmaze_omega --num_envs 7  --batch_size 2000 --no_cutoff --her rfaab_1_4_3_1_1 --save_embeddings
+
+
+# AntMaze
+python3 experiments/mega/train_mega.py --env antmaze-U-SR --tb goalgan_geaps_maze_u --max_steps 3000000 --seed 111 --first_visit_succ --ag_curiosity goaldisc --replay_size 3000000 --gamma 0.99 --go_eexplore 0.01 --env_max_step 500 --parent_folder maze_U_goalgan --num_envs 7 --batch_size 2000 --optimize_every 1 --use_skills True --n_latents 6 --skill_horizon 25 --save_embeddings
+python3 experiments/mega/train_mega.py --env antmaze-U-SR  --tb skewfit_geaps_maze_u --max_steps 3000000 --seed 111 --first_visit_succ --ag_curiosity skewfit --replay_size 3000000 --gamma 0.99 --go_eexplore 0.01 --env_max_step 500 --parent_folder maze_U_skewfit --num_envs 7 --batch_size 2000 --optimize_every 1 --use_skills True --n_latents 6 --skill_horizon 25 --her rfaab_1_4_3_1_1 --save_embeddings --gen_goal
+python3 experiments/mega/train_mega.py --env antmaze-U-SR  --tb omega_geaps_maze_u --max_steps 3000000 --seed 111 --first_visit_succ --ag_curiosity minkde --replay_size 3000000 --gamma 0.99 --go_eexplore 0.01 --env_max_step 500 --parent_folder maze_U_omega --num_envs 7 --transition_to_dg --batch_size 2000 --optimize_every 1 --use_skills True --n_latents 6 --skill_horizon 25 --her rfaab_1_4_3_1_1 --save_embeddings --no_cutoff
+
+
+# FetchPickAndPlace
+python3 experiments/mega/train_mega.py --env pickplace_obj_obj --pp_in_air_percentage 1. --hard --tb goalgan_geaps_fpp --max_steps 2000000 --seed 111 --ag_curiosity goaldisc --replay_size 2000000 --optimize_every 4 --her rfaab_1_5_2_1_1 --use_skills True --skill_horizon 8 --n_latents 8 --parent_folder fpp_goalgan --num_envs 7 --use_cache True --save_embeddings 
+python3 experiments/mega/train_mega.py --env pickplace_obj_obj --pp_in_air_percentage 1. --hard --tb skewfit_geaps_fpp --max_steps 2000000 --seed 111 --ag_curiosity skewfit --replay_size 2000000 --optimize_every 4 --her rfaab_1_5_2_1_1 --use_skills True --skill_horizon 8 --n_latents 8 --parent_folder fpp_skewfit --num_envs 7 --save_embeddings --use_cache True --vae_norm_input
+python3 experiments/mega/train_mega.py --env pickplace_obj_obj --pp_in_air_percentage 1. --hard --tb omega_geaps_fpp --max_steps 2000000 --seed 111 --ag_curiosity minkde --replay_size 2000000 --transition_to_dg --optimize_every 4 --her rfaab_1_5_2_1_1 --use_skills True --skill_horizon 8 --n_latents 8 --parent_folder fpp_omega --save_embeddings --num_envs 7 --use_cache True
+
+
+# FetchStack2
+python experiments/mega/train_mega.py --env stack2_obj_obj --tb goalgan_geaps_fsk --max_steps 3000000 --seed 111  --ag_curiosity goaldisc --replay_size 3000000 --save_embeddings --optimize_every 10 --her rfaab_1_5_2_1_1 --use_skills True --skill_horizon 5 --n_latents 8 --parent_folder fsk_goalgan --num_envs 7 --use_cache True --test_interval 10
+python experiments/mega/train_mega.py --env stack2_obj_obj --tb skewfit_geaps_fsk --max_steps 5000000 --seed 111  --ag_curiosity skewfit --replay_size 5000000 --save_embeddings --optimize_every 10 --her rfaab_1_5_2_1_1 --use_skills True --skill_horizon 5 --n_latents 8 --parent_folder fsk_skewfit --num_envs 7 --use_cache True --test_interval 10 --vae_norm_input
+python experiments/mega/train_mega.py --env stack2_obj_obj --tb omega_geaps_fsk --max_steps 3000000 --seed 111 --ag_curiosity minkde --replay_size 3000000 --transition_to_dg --optimize_every 10 --her rfaab_1_5_2_1_1 --use_skills True --skill_horizon 5  --n_latents 8 --parent_folder fsk_omega --save_embeddings  --num_envs 7 --use_cache True --test_interval 10
