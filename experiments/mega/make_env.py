@@ -24,8 +24,10 @@ def make_env(args):
     env_fn = lambda: gym.make(args.env)
     eval_env_fn = env_fn
   elif 'pointmaze' in args.env.lower():
-    env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step)
-    eval_env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=True)
+    wall_info = False
+    grid_pos = False
+    env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=False, wall_info=wall_info, grid_pos=grid_pos)
+    eval_env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=True, wall_info=wall_info, grid_pos=grid_pos)
   elif 'simplemaze' in args.env.lower():
     env_fn = lambda: SimpleMazeEnv()
     eval_env_fn = lambda: SimpleMazeEnv(test=True)
