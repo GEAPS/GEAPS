@@ -143,8 +143,10 @@ class PointMaze2D(gym.GoalEnv):
     self.maze = self._env.maze
     self.dist_threshold = 0.15
 
+    obs_dim = 2 + 4 * int(wall_info) + 2 * int(grid_pos
+
     self.action_space = gym.spaces.Box(-0.95, 0.95, (2, ))
-    observation_space = gym.spaces.Box(-np.inf, np.inf, (2, ))
+    observation_space = gym.spaces.Box(-np.inf, np.inf, (obs_dim, ))
     goal_space = gym.spaces.Box(-np.inf, np.inf, (2, ))
     self.observation_space = gym.spaces.Dict({
         'observation': observation_space,
