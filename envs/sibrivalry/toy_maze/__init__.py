@@ -134,7 +134,7 @@ class PointMaze2D(gym.GoalEnv):
   """Wraps the Sibling Rivalry 2D point maze in a gym goal env.
   Keeps the first visit done and uses -1/0 rewards.
   """
-  def __init__(self, env_max_steps, test=False):
+  def __init__(self, env_max_steps, test=False, wall_info=False, grid_pos=False):
     super().__init__()
     # n is the maximum steps - should be controlled.
     # during training, the tasks is marked as never done.
@@ -157,10 +157,27 @@ class PointMaze2D(gym.GoalEnv):
     self.max_steps = env_max_steps # 50 most of the time.
     self.num_steps = 0
     self.test = test
+    self.wall_info = wall_info
+    self.grid_pos = grid_pos
 
   def seed(self, seed=None):
     self.action_space.seed(seed=seed)
     return self.maze.seed(seed=seed)
+  
+
+  def get_obs(self):
+    obs = s_xy = self.s_xy
+    if self.grid_pos:
+      grid_xy = np.round(s_xy)
+      grid_start_xy = grid_xy - 0.5
+      rel_grid_xy = s_xy - grid_start_xy
+      obs = np.concatenate([obs, rel_grid_xy])
+
+    if self.wall_info:
+      wall_info = self.maze.get_wall_info(s_xy)
+      obs = np.concatenate([obs, wall_info])
+
+    return obs
 
   def step(self, action):
     try:
@@ -184,14 +201,16 @@ class PointMaze2D(gym.GoalEnv):
     if self.num_steps >= self.max_steps and not done:
       done = True
       info['TimeLimit.truncated'] = True
+    
+    obs = self.get_obs()
 
-    obs = {
-        'observation': s_xy,
+    obs_with_goal_info = {
+        'observation': obs,
         'achieved_goal': s_xy,
         'desired_goal': self.g_xy,
     }
 
-    return obs, reward, done, info
+    return obs_with_goal_info, reward, done, info
 
   def reset(self):
     self.num_steps = 0
@@ -199,8 +218,10 @@ class PointMaze2D(gym.GoalEnv):
     self.s_xy = s_xy
     g_xy = np.array(self.maze.sample_goal(min_wall_dist=0.025 + self.dist_threshold))
     self.g_xy = g_xy
+    obs = self.get_obs()
+
     return {
-        'observation': s_xy,
+        'observation': obs,
         'achieved_goal': s_xy,
         'desired_goal': g_xy,
     }

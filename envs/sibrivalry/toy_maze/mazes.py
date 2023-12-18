@@ -267,6 +267,17 @@ class Maze:
             if float(np.sum(np.abs((loc + dist_checker) - stopped_loc))) == 0.0:
                 break
         return loc[0], loc[1]
+    
+    def get_wall_info(self, coord):
+        cx, cy = coord
+        grid_x = np.round(cx)
+        grid_y = np.round(cy)
+
+        wall_info = []
+        for direction in ['up', 'right', 'down', 'left']:
+            wall = self._wall_line((grid_x, grid_y), direction)
+            wall_info.append(float(wall in self._walls))
+        return np.array(wall_info)
 
     def move(self, coord_start, coord_delta, depth=None):
         if depth is None:
