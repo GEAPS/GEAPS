@@ -53,7 +53,7 @@ class PmSkillPolicy(nn.Module):
     def get_skill_state(self, state):
         # the goal will not be considered for the low-level skill
         if isinstance(state, dict):
-            obs = state['observation']
+            obs = state['achieved_goal']
             assert obs.shape[-1] == 2, "The environment is not pointmaze"
             obs = obs - np.round(obs)
             return obs
