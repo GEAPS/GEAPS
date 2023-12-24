@@ -45,6 +45,9 @@ class MazeEnv(gym.Env):
       sensor_range=3.,
       sensor_span=2 * math.pi,
       observe_blocks=False,
+      sense_wall=False,
+      sense_dropoff=False,
+      sense_block=False,
       put_spin_near_agent=False,
       top_down_view=False,
       manual_collision=False,
@@ -64,6 +67,9 @@ class MazeEnv(gym.Env):
     self._n_bins = n_bins
     self._sensor_range = sensor_range * size_scaling
     self._sensor_span = sensor_span
+    self._sense_wall = sense_wall
+    self._sense_dropoff = sense_dropoff
+    self._sense_block = sense_block
     self._observe_blocks = observe_blocks
     self._put_spin_near_agent = put_spin_near_agent
     self._top_down_view = top_down_view
@@ -405,6 +411,16 @@ class MazeEnv(gym.Env):
           sensor_readings[ray_idx][idx] = (self._sensor_range - first_seg["distance"]) / self._sensor_range
 
     return sensor_readings
+  
+  def sensor_filtering(self, sensor_readings):
+    res = []
+    if self._sense_wall:
+      res.append(sensor_readings[:, 0])
+    if self._sense_dropoff:
+      res.append(sensor_readings[:, 1])
+    if self._sense_block:
+      res.append(sensor_readings[:, 2])
+    return np.concatenate(res)
 
   def _get_obs(self):
     wrapped_obs = self.wrapped_env._get_obs()
@@ -421,6 +437,8 @@ class MazeEnv(gym.Env):
                                    [wrapped_obs[3:]])
 
     range_sensor_obs = self.get_range_sensor_obs()
+    if len(range_sensor_obs) > 0:
+      range_sensor_obs = self.sensor_filtering(range_sensor_obs)
 
     return np.concatenate([wrapped_obs,
                            range_sensor_obs.flat] +

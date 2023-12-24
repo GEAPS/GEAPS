@@ -24,9 +24,12 @@ class AntMazeEnv(gym.GoalEnv):
     if 'antmaze' in variant:
       mazeinfo = variant.split('-')
       goal_type = "sr"
-      shape = "s"
+      shape = "u"
+      extra = ""
 
-      if len(mazeinfo) == 3:
+      if len(mazeinfo) == 4:
+        extra, mazename, shape, goal_type = mazeinfo
+      elif len(mazeinfo) == 3:
         mazename, shape, goal_type = mazeinfo
       elif len(mazeinfo) == 2:
         mazename, shape = mazeinfo
@@ -40,6 +43,8 @@ class AntMazeEnv(gym.GoalEnv):
       # make it configurable.
       maze = "Maze_" + shape.upper()
       mazename = "Ant" + maze
+      if len(extra) > 0:
+        mazename = extra.capitalize() + mazename
       if goal_type == 'sr':
         goal_range = maze_env_utils.default_desired_goal_distribution[maze]
         self.sample_goal = lambda: self.np_random.uniform(goal_range[0], goal_range[1]).astype(np.float32)
@@ -81,9 +86,8 @@ class AntMazeEnv(gym.GoalEnv):
     self.max_steps = env_max_steps
     self.dist_threshold = 1.0
 
-
     self.action_space = self.maze.action_space
-    observation_space = gym.spaces.Box(-np.inf, np.inf, (state_dims,))
+    observation_space = self.maze.observation_space
     if self.goal_dim > 0:
         goal_space        = gym.spaces.Box(-np.inf, np.inf, (self.goal_dim,)) # first few coords of state
     else:

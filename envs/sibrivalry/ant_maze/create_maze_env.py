@@ -8,10 +8,18 @@ from envs.sibrivalry.ant_maze.ant_maze_env import AntMazeEnv
 
 def create_maze_env(env_name=None, top_down_view=False):
   n_bins = 0
+  # hard coded
+  sense_wall = sense_dropoff = sense_block = False
+  sensor_range = 2
+
   manual_collision = False
   if env_name.startswith('Ego'):
     n_bins = 8
     env_name = env_name[3:]
+  if env_name.startswith('Sense'):
+    n_bins = 4
+    sense_wall = True
+    env_name = env_name[5:]
   if env_name.startswith('Ant'):
     cls = AntMazeEnv
     env_name = env_name[3:]
@@ -45,7 +53,11 @@ def create_maze_env(env_name=None, top_down_view=False):
   gym_mujoco_kwargs = {
       'maze_id': maze_id,
       'n_bins': n_bins,
+      'sensor_range': sensor_range,
       'observe_blocks': observe_blocks,
+      'sense_wall': sense_wall,
+      'sense_dropoff': sense_dropoff,
+      'sense_block': sense_block,
       'put_spin_near_agent': put_spin_near_agent,
       'top_down_view': top_down_view,
       'manual_collision': manual_collision,
