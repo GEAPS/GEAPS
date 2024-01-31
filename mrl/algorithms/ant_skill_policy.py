@@ -54,8 +54,7 @@ class AntSkillPolicy(nn.Module):
         if isinstance(state, dict):
             obs = state['observation']
             if "maze" in self.env_name.lower():
-                assert obs.shape[-1] == 30, "The environment is not AntMaze"
-                obs = obs[..., 2:-1]
+                obs = obs[..., 2:29]
             elif "push" in self.env_name.lower():
                 assert obs.shape[-1] == 33, "The environment is not AntPush"
                 obs = np.concatenate([obs[..., 2:3], obs[..., 6:-1]], axis=-1)
