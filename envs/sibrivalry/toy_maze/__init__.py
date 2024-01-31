@@ -134,12 +134,12 @@ class PointMaze2D(gym.GoalEnv):
   """Wraps the Sibling Rivalry 2D point maze in a gym goal env.
   Keeps the first visit done and uses -1/0 rewards.
   """
-  def __init__(self, env_max_steps, test=False, wall_info=False, grid_pos=False):
+  def __init__(self, env_max_steps, test=False, wall_info=False, grid_pos=False, maze_type="square_large"):
     super().__init__()
     # n is the maximum steps - should be controlled.
     # during training, the tasks is marked as never done.
     # num_steps is not configurable.
-    self._env = Env(n=env_max_steps, maze_type='square_large', use_antigoal=False, ddiff=False, ignore_reset_start=True)
+    self._env = Env(n=env_max_steps, maze_type=maze_type, use_antigoal=False, ddiff=False, ignore_reset_start=True)
     self.maze = self._env.maze
     self.dist_threshold = 0.15
 

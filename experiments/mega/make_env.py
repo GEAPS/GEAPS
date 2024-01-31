@@ -26,8 +26,9 @@ def make_env(args):
   elif 'pointmaze' in args.env.lower():
     wall_info = True
     grid_pos = True
-    env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=False, wall_info=wall_info, grid_pos=grid_pos)
-    eval_env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=True, wall_info=wall_info, grid_pos=grid_pos)
+    maze_type = "spiral_large"
+    env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=False, wall_info=wall_info, grid_pos=grid_pos, maze_type=maze_type)
+    eval_env_fn = lambda: PointMaze2D(env_max_steps=args.env_max_step, test=True, wall_info=wall_info, grid_pos=grid_pos, maze_type=maze_type)
   elif 'simplemaze' in args.env.lower():
     env_fn = lambda: SimpleMazeEnv()
     eval_env_fn = lambda: SimpleMazeEnv(test=True)

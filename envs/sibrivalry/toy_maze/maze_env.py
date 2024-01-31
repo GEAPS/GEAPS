@@ -151,7 +151,7 @@ class Env:
         else:
             s_xy = self.to_tensor(state)
         if goal is None:
-            if 'square' in self.maze_type:
+            if 'square' in self.maze_type or 'spiral' in self.maze_type:
                 g_xy = self.to_tensor(self.maze.sample_goal(min_wall_dist=0.025 + self.dist_threshold))
             else:
                 g_xy = self.to_tensor(self.maze.sample_goal())
